@@ -41,7 +41,9 @@ public class GroceryListOrganizerGUI extends JFrame {
         //this.OrganizedListPanel = new JPanel();
         this.DeletePanel = new JPanel();
         
-        
+        setSize(500,200);
+        setMinimumSize(new Dimension(500,200));
+     
         setLayout(new BorderLayout());  //sets grame to BorderLayout
         this.panel.setLayout(new BoxLayout(this.panel, BoxLayout.Y_AXIS));     //sets main panel to BoxLayout vertically
         this.CategoryPanel.setLayout(new GridLayout(2,2));  //sets CategoryPanel to GridLayout 2x2
