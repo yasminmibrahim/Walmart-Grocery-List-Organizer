@@ -19,7 +19,8 @@ public class GroceryListOrganizerGUI extends JFrame {
     private JPanel CategoryPanel;  //panel that holds the category buttons
     private JPanel ListPanel;      //parent panel of grocery and organized list panels
     private JPanel GroceryListPanel;  //grocery list panel, sub panel of ListPanel
-    private JPanel OragnizedListPanel; //organized list panel, sub panel of ListPanel
+    private JPanel OrganizedListPanel; //organized list panel, sub panel of ListPanel
+    private JPanel DeletePanel; //panel that holds delete buttons corresponding to each checkbox
     
     private JLabel ItemToAddLabel = new JLabel();
     private JTextField ItemToAdd = new JTextField();
@@ -29,21 +30,25 @@ public class GroceryListOrganizerGUI extends JFrame {
     
     private GroceryJButton ClickedButton;   //button that is currently clicked
     
+    private ArrayList<GroceryJCheckBox> GroceryList = new ArrayList<GroceryJCheckBox>();
+    
     public GroceryListOrganizerGUI() {
         this.buttons = new ArrayList<JButton>();
         this.panel = new JPanel();
         this.CategoryPanel = new JPanel();
         this.ListPanel = new JPanel();
         this.GroceryListPanel = new JPanel();
-        this.OragnizedListPanel = new JPanel();
+        //this.OrganizedListPanel = new JPanel();
+        this.DeletePanel = new JPanel();
         
         
         setLayout(new BorderLayout());  //sets grame to BorderLayout
         this.panel.setLayout(new BoxLayout(this.panel, BoxLayout.Y_AXIS));     //sets main panel to BoxLayout vertically
         this.CategoryPanel.setLayout(new GridLayout(2,2));  //sets CategoryPanel to GridLayout 2x2
         this.ListPanel.setLayout(new BoxLayout(this.ListPanel, BoxLayout.X_AXIS));  //sets ListPanel to BoxLayout horizontally
-        this.GroceryListPanel.setLayout(new BoxLayout(this.GroceryListPanel, BoxLayout.Y_AXIS)); //sets GroceryListPanel to BoxLayout horizontally
-        this.OragnizedListPanel.setLayout(new BoxLayout(this.OragnizedListPanel, BoxLayout.Y_AXIS)); //sets OrganizedListPanel to BoxLayout horizontally
+        this.GroceryListPanel.setLayout(new BoxLayout(this.GroceryListPanel, BoxLayout.Y_AXIS)); //sets GroceryListPanel to BoxLayout vertically
+        //this.OrganizedListPanel.setLayout(new BoxLayout(this.OrganizedListPanel, BoxLayout.Y_AXIS)); //sets OrganizedListPanel to BoxLayout vertically
+        this.DeletePanel.setLayout(new BoxLayout(this.DeletePanel, BoxLayout.Y_AXIS)); //sets DeletePanel to BoxLayout vertically
         
         add(panel, BorderLayout.CENTER);  //adds main panel to center position of frame
         
@@ -56,19 +61,19 @@ public class GroceryListOrganizerGUI extends JFrame {
         });
         
         GroceryListLabel.setText("Grocery List:");
-        OrganizedListLabel.setText("Organized List:");
+        //OrganizedListLabel.setText("Organized List:");
         
         panel.add(ItemToAddLabel);
         panel.add(ItemToAdd);
         
-        for(int i = 0; i < aisles.size(); i++) {
+        for(int i = 0; i < 3; i++) {
             String[] categories = (aisles.get(i)).getCategories();
             for(int j = 0; j < categories.length; j++){
                 GroceryJButton categoryButton = new GroceryJButton(aisles.get(i), categories[j]);
                 categoryButton.setOpaque(true);
                 categoryButton.addActionListener(new ActionListener() {
                     public void actionPerformed(ActionEvent evt) {
-                        BroceryButtonActionPerformed(evt);
+                        GroceryButtonActionPerformed(evt);
                     }
                 });
                 buttons.add(categoryButton);
@@ -83,11 +88,12 @@ public class GroceryListOrganizerGUI extends JFrame {
         }
         
         ListPanel.add(GroceryListPanel);
-        ListPanel.add(Box.createHorizontalStrut(100));
-        ListPanel.add(OragnizedListPanel);
+        ListPanel.add(DeletePanel);
+        //ListPanel.add(Box.createHorizontalStrut(100));
+        //ListPanel.add(OrganizedListPanel);
         
         GroceryListPanel.add(GroceryListLabel);
-        OragnizedListPanel.add(OrganizedListLabel);
+        //OrganizedListPanel.add(OrganizedListLabel);
         
         panel.add(AddButton);
         panel.add(ListPanel);
@@ -104,8 +110,20 @@ public class GroceryListOrganizerGUI extends JFrame {
             aisle = ClickedButton.getAisle();
         }
         
-        JCheckBox item = new JCheckBox(ItemToAdd.getText()+" - "+(aisle!=null ? aisle.toString() : "Other"));
+        GroceryJCheckBox item = new GroceryJCheckBox(aisle, ItemToAdd.getText() + " - " + (aisle!=null ? aisle.toString() : "Other"));
+        DeleteJButton delete = new DeleteJButton(item, "delete");
+        delete.addActionListener(new ActionListener() {
+                    public void actionPerformed(ActionEvent evt) {
+                        DeleteButtonActionPerformed(evt);
+                    }
+                });
+        
+        GroceryList.add(item);
         GroceryListPanel.add(item);
+        DeletePanel.add(delete);
+        //OrganizedListPanel.add(item);
+        
+        
         ItemToAdd.setText("");
         
         if(ClickedButton != null && ClickedButton.getBackground() == Color.BLUE) {
@@ -113,10 +131,11 @@ public class GroceryListOrganizerGUI extends JFrame {
             ClickedButton = null;
         }
         
+        
         pack();
     }
     
-    private void BroceryButtonActionPerformed(ActionEvent evt) {
+    private void GroceryButtonActionPerformed(ActionEvent evt) {
         GroceryJButton buttonClicked = (GroceryJButton)evt.getSource();
         if(buttonClicked.getBackground() != Color.BLUE) {
             for(int i = 0; i < buttons.size(); i++) {
@@ -132,6 +151,15 @@ public class GroceryListOrganizerGUI extends JFrame {
         ClickedButton = buttonClicked;
         
         
+    }
+    
+    private void DeleteButtonActionPerformed(ActionEvent evt) {
+        DeleteJButton delete = (DeleteJButton)evt.getSource();
+        GroceryListPanel.remove(delete.getButton());
+        DeletePanel.remove(delete);
+        
+        ListPanel.revalidate();
+        ListPanel.repaint();
     }
     
     /*
