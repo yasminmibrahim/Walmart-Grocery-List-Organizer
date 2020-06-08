@@ -13,4 +13,8 @@ public class DeleteJButton extends JButton {
     public GroceryJCheckBox getButton() {
         return delete;
     }
+    
+    public int compareTo(DeleteJButton o2) {
+        return (o2.getButton().getAisle().getNum()) - (delete.getAisle().getNum());
+    }
 }

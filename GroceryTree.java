@@ -1,69 +1,79 @@
 import java.util.*;
+import javax.swing.*;
 
-
-public class GroceryTree implements Queue<GroceryJCheckBox> {
+public class GroceryTree implements Queue<JComponent> {
     
     private int k;
-    private int size;
-    private ArrayList<GroceryJCheckBox> tree;
-    private Comparator<GroceryJCheckBox> comp;
+    private int GrocerySize;
+    private int DeleteSize;
+    private ArrayList<GroceryJCheckBox> GroceryList;
+    private ArrayList<DeleteJButton> DeleteList;
+    private Comparator<GroceryJCheckBox> GroceryComp;
+    private Comparator<DeleteJButton> DeleteComp;
     
     public GroceryTree(int k) {
         this.k = k;
-        comp = new Comparator<GroceryJCheckBox>() {
-                    public int compare(GroceryJCheckBox o1, GroceryJCheckBox o2) {
-                        return o1.compareTo(o2);
-                    }
-                };
+        this.GrocerySize = 0;
+        this.DeleteSize = 0;
+        this.GroceryList = new ArrayList<GroceryJCheckBox>();
+        this.DeleteList = new ArrayList<DeleteJButton>();
+        GroceryComp = new Comparator<GroceryJCheckBox>() {
+            public int compare(GroceryJCheckBox o1, GroceryJCheckBox o2) {
+                return o1.compareTo(o2);
+            }
+        };
+        DeleteComp = new Comparator<DeleteJButton>() {
+            public int compare(DeleteJButton o1, DeleteJButton o2) {
+                return o1.compareTo(o2);
+            }
+        };
     }
     
-    public GroceryJCheckBox peek() {
-        if(size == 0)
-            return null;
-        return tree.get(0);
-    }
-    
-    public GroceryJCheckBox element() {
+    public JComponent peek() {
         return null;
     }
     
-    public GroceryJCheckBox poll() {
+    public JComponent element() {
         return null;
     }
     
-    public GroceryJCheckBox remove() {
-         if(size == 0)
+    public JComponent poll() {
+        return null;
+    }
+    
+    public JComponent remove() {
+         if(GrocerySize == 0)
             return null;
-        if(size == 1) {
-            size--;
-            return tree.remove(0);
+        if(GrocerySize == 1) {
+            GrocerySize--;
+            return GroceryList.remove(0);
         }
-        GroceryJCheckBox remove = tree.get(0);
-        int index = size-1;
+        GroceryJCheckBox remove = GroceryList.get(0);
+        int index = GrocerySize-1;
         int parent = 0;
         int child = parent*k + 1;
         int max = child;
         int height = 1;
         boolean m = false;
-        tree.set(0, tree.remove(index));
-        size--;
+        GroceryList.set(0, GroceryList.remove(index));
+        GrocerySize--;
         index = parent;
-        while(child < size) {
+        while(child < GrocerySize) {
             int i = 1;
             max = child;
             m = false;
-            while(i <= (Math.pow(k, height)) && child<size) {
-                if((comp.compare(tree.get(parent), tree.get(child)) > 0) && (comp.compare(tree.get(max), tree.get(child)) >= 0)) {
-                    if(comp.compare(tree.get(max), tree.get(child)) > 0) max = child;
+            while(i <= (Math.pow(k, height)) && child<GrocerySize) {
+                if((GroceryComp.compare(GroceryList.get(parent), GroceryList.get(child)) > 0) && (GroceryComp.compare(GroceryList.get(max), GroceryList.get(child)) >= 0)) {
+                    if(GroceryComp.compare(GroceryList.get(max), GroceryList.get(child)) > 0) max = child;
                     m = true;
                 }
                 child = parent*k + (i+1);
                 i++;
             }
             if(m) {
-                GroceryJCheckBox p = tree.get(parent);
-                tree.set(parent, tree.get(max));
-                tree.set(max, p);
+                GroceryJCheckBox p = GroceryList.get(parent);
+                GroceryList.set(parent, GroceryList.get(max));
+                GroceryList.set(max, p);
             }
             height++;
             index = parent*k + 1;
@@ -73,21 +83,81 @@ public class GroceryTree implements Queue<GroceryJCheckBox> {
         return remove;
     }
     
-    public boolean offer(GroceryJCheckBox e) {
+    public JComponent deleteRemove() {
+         if(DeleteSize == 0)
+            return null;
+        if(DeleteSize == 1) {
+            DeleteSize--;
+            return DeleteList.remove(0);
+        }
+        DeleteJButton remove = DeleteList.get(0);
+        int index = DeleteSize-1;
+        int parent = 0;
+        int child = parent*k + 1;
+        int max = child;
+        int height = 1;
+        boolean m = false;
+        DeleteList.set(0, DeleteList.remove(index));
+        DeleteSize--;
+        index = parent;
+        while(child < DeleteSize) {
+            int i = 1;
+            max = child;
+            m = false;
+            while(i <= (Math.pow(k, height)) && child<DeleteSize) {
+                if((DeleteComp.compare(DeleteList.get(parent), DeleteList.get(child)) > 0) && (DeleteComp.compare(DeleteList.get(max), DeleteList.get(child)) >= 0)) {
+                    if(DeleteComp.compare(DeleteList.get(max), DeleteList.get(child)) > 0) max = child;
+                    m = true;
+                }
+                child = parent*k + (i+1);
+                i++;
+            }
+            if(m) {
+                DeleteJButton p = DeleteList.get(parent);
+                DeleteList.set(parent, DeleteList.get(max));
+                DeleteList.set(max, p);
+            }
+            height++;
+            index = parent*k + 1;
+            parent = index;
+            child = parent*k + 1;
+        }
+        return remove;
+    }
+    
+    public boolean offer(JComponent e) {
         return true;
     }
     
-    public boolean add(GroceryJCheckBox e) {
-        tree.add(e);
-        size++;
-        int index = size-1;
+    public boolean add(JComponent e) {
+        GroceryList.add((GroceryJCheckBox)e);
+        GrocerySize++;
+        int index = GrocerySize-1;
         int parent = (index-1)/k;
         while(index > 0) {
             parent = (index-1)/k;
-            if(comp.compare(tree.get(parent), e) > 0) {
-                GroceryJCheckBox p = tree.get(parent);
-                tree.set(parent, e);
-                tree.set(index, p);
+            if(GroceryComp.compare(GroceryList.get(parent), (GroceryJCheckBox)e) > 0) {
+                GroceryJCheckBox p = GroceryList.get(parent);
+                GroceryList.set(parent, (GroceryJCheckBox)e);
+                GroceryList.set(index, p);
+                index = parent;
+            }
+            else break;
+        }
+        return true;
+    }
+    
+    public boolean deleteAdd(JComponent e) {
+        DeleteList.add((DeleteJButton)e);
+        DeleteSize++;
+        int index = DeleteSize-1;
+        int parent = (index-1)/k;
+        while(index > 0) {
+            parent = (index-1)/k;
+            if(DeleteComp.compare(DeleteList.get(parent), (DeleteJButton)e) > 0) {
+                DeleteJButton p = DeleteList.get(parent);
+                DeleteList.set(parent, (DeleteJButton)e);
+                DeleteList.set(index, p);
                 index = parent;
             }
             else break;
@@ -106,7 +176,15 @@ public class GroceryTree implements Queue<GroceryJCheckBox> {
     }
     
     public int size() {
-        return this.size;
+        return 0;
+    }
+    
+    public int grocerySize() {
+        return this.GrocerySize;
+    }
+    
+    public int deleteSize() {
+        return this.DeleteSize;
     }
     
     
@@ -116,7 +194,7 @@ public class GroceryTree implements Queue<GroceryJCheckBox> {
     /**
      * {@inheritDoc}
      */
-    public boolean addAll(Collection<? extends GroceryJCheckBox> c) {
+    public boolean addAll(Collection<? extends JComponent> c) {
         throw new UnsupportedOperationException();
     }
     /**
@@ -146,7 +224,7 @@ public class GroceryTree implements Queue<GroceryJCheckBox> {
     /**
      * {@inheritDoc}
      */
-    public Iterator<GroceryJCheckBox> iterator() {
+    public Iterator<JComponent> iterator() {
         throw new UnsupportedOperationException();
     }
     /**

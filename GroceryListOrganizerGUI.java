@@ -34,6 +34,9 @@ public class GroceryListOrganizerGUI extends JFrame {
     private ArrayList<GroceryJCheckBox> GroceryList = new ArrayList<GroceryJCheckBox>();
     private ArrayList<DeleteJButton> DeleteList = new ArrayList<DeleteJButton>();
     
+    private Object[] GroceryArray;
+    private Object[] DeleteArray;
+    
     public GroceryListOrganizerGUI() {
         this.buttons = new ArrayList<JButton>();
         this.panel = new JPanel();
@@ -43,12 +46,12 @@ public class GroceryListOrganizerGUI extends JFrame {
         //this.OrganizedListPanel = new JPanel();
         this.DeletePanel = new JPanel();
         
-        setSize(500,200);
-        setMinimumSize(new Dimension(500,200));
+        setSize(1000,400);
+        setMinimumSize(new Dimension(1000,400));
         
         setLayout(new BorderLayout());  //sets grame to BorderLayout
         this.panel.setLayout(new BoxLayout(this.panel, BoxLayout.Y_AXIS));     //sets main panel to BoxLayout vertically
-        this.CategoryPanel.setLayout(new GridLayout(2,2));  //sets CategoryPanel to GridLayout 2x2
+        this.CategoryPanel.setLayout(new GridLayout(10,4));  //sets CategoryPanel to GridLayout 10x4
         this.ListPanel.setLayout(new BoxLayout(this.ListPanel, BoxLayout.X_AXIS));  //sets ListPanel to BoxLayout horizontally
         this.GroceryListPanel.setLayout(new BoxLayout(this.GroceryListPanel, BoxLayout.Y_AXIS)); //sets GroceryListPanel to BoxLayout vertically
         //this.OrganizedListPanel.setLayout(new BoxLayout(this.OrganizedListPanel, BoxLayout.Y_AXIS)); //sets OrganizedListPanel to BoxLayout vertically
@@ -70,7 +73,7 @@ public class GroceryListOrganizerGUI extends JFrame {
         panel.add(ItemToAddLabel);
         panel.add(ItemToAdd);
         
-        for(int i = 0; i < 3; i++) {
+        for(int i = 0; i < aisles.size(); i++) {
             String[] categories = (aisles.get(i)).getCategories();
             for(int j = 0; j < categories.length; j++){
                 GroceryJButton categoryButton = new GroceryJButton(aisles.get(i), categories[j]);
@@ -136,7 +139,22 @@ public class GroceryListOrganizerGUI extends JFrame {
             ClickedButton = null;
         }
         
-        GroceryListSort.sort(GroceryList, DeleteList);
+        GroceryArray = GroceryList.toArray();
+        DeleteArray = DeleteList.toArray();
+        
+        GroceryListSort.sort(GroceryArray, DeleteArray);
+        
+        GroceryListPanel.removeAll();
+        DeletePanel.removeAll();
+        
+        int size = GroceryList.size();
+        
+        for(int i = 0; i < size; i++) {
+            GroceryList.add((GroceryJCheckBox)GroceryArray[i]);
+            GroceryListPanel.add((GroceryJCheckBox)GroceryArray[i]);
+            DeleteList.add((DeleteJButton)DeleteArray[i]);
+            DeletePanel.add((DeleteJButton)DeleteArray[i]);
+        }
         
         pack();
     }
@@ -162,7 +180,9 @@ public class GroceryListOrganizerGUI extends JFrame {
     private void DeleteButtonActionPerformed(ActionEvent evt) {
         DeleteJButton delete = (DeleteJButton)evt.getSource();
         GroceryListPanel.remove(delete.getButton());
+        GroceryList.remove(delete.getButton());
         DeletePanel.remove(delete);
+        DeleteList.remove(delete);
         
         ListPanel.revalidate();
         ListPanel.repaint();

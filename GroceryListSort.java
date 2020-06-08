@@ -3,7 +3,7 @@ import javax.swing.*;
 
 public class GroceryListSort {
     
-    private ArrayList<GroceryJCheckBox> GroceryList;
+    //private ArrayList<GroceryJCheckBox> GroceryList;
     
     /*
     public GroceryListSort(ArrayList<GroceryJCheckBox> GroceryList) {
@@ -11,16 +11,16 @@ public class GroceryListSort {
     }
     */
     
-    public static void sort(ArrayList<GroceryJCheckBox> gl, ArrayList<DeleteJButton> dl) {   //min heap
-        GroceryJCheckBox[] GroceryList = (GroceryJCheckBox[])gl.toArray();
-        DeleteJButton[] DeleteList = (DeleteJButton[])dl.toArray();
+    public static void sort(Object[] GroceryArray, Object[] DeleteArray) {   //min heap
         
         GroceryTree sort = new GroceryTree(2);
-        for(int i = 0; i < GroceryList.length; i++) {
-            sort.add(GroceryList[i]);
+        for(int i = 0; i < GroceryArray.length; i++) {
+            sort.add((GroceryJCheckBox)GroceryArray[i]);
+            sort.deleteAdd((DeleteJButton)DeleteArray[i]);
         }
-        for(int i = 0; i < GroceryList.length; i++) {
-            GroceryList[GroceryList.length-1-i] = sort.remove();
+        for(int i = 0; i < GroceryArray.length; i++) {
+            GroceryArray[GroceryArray.length-1-i] = sort.remove();
+            DeleteArray[DeleteArray.length-1-i] = sort.deleteRemove();
         }
     }
 }
