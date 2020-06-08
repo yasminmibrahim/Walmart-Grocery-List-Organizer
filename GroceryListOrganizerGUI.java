@@ -149,6 +149,11 @@ public class GroceryListOrganizerGUI extends JFrame {
         
         int size = GroceryList.size();
         
+        GroceryList.clear();
+        DeleteList.clear();
+        
+        
+        
         for(int i = 0; i < size; i++) {
             GroceryList.add((GroceryJCheckBox)GroceryArray[i]);
             GroceryListPanel.add((GroceryJCheckBox)GroceryArray[i]);
