@@ -5,6 +5,7 @@ import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 
 import java.awt.Color;
+import java.awt.Dimension;
  
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -31,6 +32,7 @@ public class GroceryListOrganizerGUI extends JFrame {
     private GroceryJButton ClickedButton;   //button that is currently clicked
     
     private ArrayList<GroceryJCheckBox> GroceryList = new ArrayList<GroceryJCheckBox>();
+    private ArrayList<DeleteJButton> DeleteList = new ArrayList<DeleteJButton>();
     
     public GroceryListOrganizerGUI() {
         this.buttons = new ArrayList<JButton>();
@@ -43,7 +45,7 @@ public class GroceryListOrganizerGUI extends JFrame {
         
         setSize(500,200);
         setMinimumSize(new Dimension(500,200));
-     
+        
         setLayout(new BorderLayout());  //sets grame to BorderLayout
         this.panel.setLayout(new BoxLayout(this.panel, BoxLayout.Y_AXIS));     //sets main panel to BoxLayout vertically
         this.CategoryPanel.setLayout(new GridLayout(2,2));  //sets CategoryPanel to GridLayout 2x2
@@ -121,6 +123,7 @@ public class GroceryListOrganizerGUI extends JFrame {
                 });
         
         GroceryList.add(item);
+        DeleteList.add(delete);
         GroceryListPanel.add(item);
         DeletePanel.add(delete);
         //OrganizedListPanel.add(item);
@@ -133,6 +136,7 @@ public class GroceryListOrganizerGUI extends JFrame {
             ClickedButton = null;
         }
         
+        GroceryListSort.sort(GroceryList, DeleteList);
         
         pack();
     }

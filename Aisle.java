@@ -33,6 +33,9 @@ public enum Aisle {
     public String[] getCategories() {
         return this.categories;
     }
-        
+    
+    public int getNum() {
+        return num;
+    }
         
 }

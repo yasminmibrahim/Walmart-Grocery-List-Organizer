@@ -13,4 +13,8 @@ public class GroceryJCheckBox extends JCheckBox {
     public Aisle getAisle() {
         return aisle;
     }
+    
+    public int compareTo(GroceryJCheckBox o2) {
+        return (o2.getAisle().getNum()) - (aisle.getNum());
+    }
 }
