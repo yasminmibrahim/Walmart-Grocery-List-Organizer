@@ -102,9 +102,11 @@ public class GroceryListOrganizerGUI extends JFrame {
         GroceryListPanel.add(GroceryListLabel);
         //OrganizedListPanel.add(OrganizedListLabel);
         
+        
         panel.add(AddButton);
         panel.add(ListPanel);
 
+        
         
     }
     
@@ -112,7 +114,7 @@ public class GroceryListOrganizerGUI extends JFrame {
         if(ItemToAdd.getText().equals("")) {      //if user didn't enter anything, returns
             return;
         }
-        Aisle aisle = null;
+        Aisle aisle = Aisle.OTHER;
         if(ClickedButton != null) {  //if a category is chosen, records aisle of category
             aisle = ClickedButton.getAisle();
         }
@@ -134,8 +136,8 @@ public class GroceryListOrganizerGUI extends JFrame {
         
         ItemToAdd.setText("");
         
-        if(ClickedButton != null && ClickedButton.getBackground() == Color.BLUE) {
-            ClickedButton.setBackground(null);
+        if(ClickedButton != null && ClickedButton.getForeground() == Color.BLUE) {
+            ClickedButton.setForeground(null);
             ClickedButton = null;
         }
         
@@ -166,17 +168,18 @@ public class GroceryListOrganizerGUI extends JFrame {
     
     private void GroceryButtonActionPerformed(ActionEvent evt) {
         GroceryJButton buttonClicked = (GroceryJButton)evt.getSource();
-        if(buttonClicked.getBackground() != Color.BLUE) {
+        //buttonClicked.setBorderPainted(false);
+        if(buttonClicked.getForeground() != Color.BLUE) {
             for(int i = 0; i < buttons.size(); i++) {
-                if(buttons.get(i).getBackground() == Color.BLUE) {
-                    buttons.get(i).setBackground(null);
+                if(buttons.get(i).getForeground() == Color.BLUE) {
+                    buttons.get(i).setForeground(null);
                     break;
                 }
             }
-            buttonClicked.setBackground(Color.BLUE);
+            buttonClicked.setForeground(Color.BLUE);
             ClickedButton = buttonClicked;
         }
-        else buttonClicked.setBackground(null);
+        else buttonClicked.setForeground(null);
         ClickedButton = buttonClicked;
         
         
@@ -209,11 +212,13 @@ public class GroceryListOrganizerGUI extends JFrame {
     */
     
     public static void main(String[] args) {
-        
+        GroceryListOrganizerGUI gui = new GroceryListOrganizerGUI();
         EventQueue.invokeLater(new Runnable() {
             public void run() {
                 //createAndShowGUI();
-                new GroceryListOrganizerGUI().setVisible(true);
+                gui.setVisible(true);
+                gui.setLocationRelativeTo(null);
+                
             }
         });
     }

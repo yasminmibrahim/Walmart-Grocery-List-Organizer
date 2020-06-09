@@ -20,7 +20,8 @@ public enum Aisle {
     A18(18, new String[]{"Wine", "Cold Beer", "Mixers"}),
     A19(19, new String[]{"Chips"}),
     A20(20, new String[]{"Bread"}),
-    A21(21, new String[]{"Eggs", "Milk"});
+    A21(21, new String[]{"Eggs", "Milk"}),
+    OTHER(22, new String[]{"Other"});
      
     private final int num;
     private final String[] categories;
