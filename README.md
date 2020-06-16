@@ -1,1 +1,0 @@
-# Walmart-Grocery-List-Organizer
